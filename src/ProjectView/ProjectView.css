@@ -1,0 +1,29 @@
+.Column-Form {
+    width: 100%;
+    text-align: center;
+}
+
+.formDiv {
+    margin: 0;
+    width: 20%;
+}
+
+.formInput {
+    border-bottom: solid 2px;
+    border-left: solid 2px;
+    width: 20%;
+}
+
+.task-list {
+    float: left;
+    border: solid 2px;
+    width: 32%;
+    height: 50%;
+}
+
+
+.task-list-item {
+    width: 100%;
+    border: solid 2px;
+    list-style-type: none;
+}

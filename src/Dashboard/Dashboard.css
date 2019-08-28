@@ -1,0 +1,15 @@
+.Column-Form {
+    width: 100%;
+    text-align: center;
+}
+
+.formDiv {
+    margin: 0;
+    width: 20%;
+}
+
+.formInput {
+    border-bottom: solid 2px;
+    border-left: solid 2px;
+    width: 20%;
+}

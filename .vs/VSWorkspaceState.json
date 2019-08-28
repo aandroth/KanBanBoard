@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\AddProject",
+    "\\src\\AddProjectTask",
+    "\\src\\Dashboard",
+    "\\src\\History",
+    "\\src\\ProjectView",
+    "\\src\\Redux",
+    "\\src\\Signup"
+  ],
+  "SelectedNode": "\\src\\AddProject\\UpdateProject.js",
+  "PreviewInSolutionExplorer": false
+}
