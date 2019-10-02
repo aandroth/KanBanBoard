@@ -1,15 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
     "\\src",
-    "\\src\\AddProject",
-    "\\src\\AddProjectTask",
-    "\\src\\Dashboard",
-    "\\src\\History",
-    "\\src\\ProjectView",
-    "\\src\\Redux",
-    "\\src\\Signup"
+    "\\src\\ServerSide"
   ],
-  "SelectedNode": "\\src\\AddProject\\UpdateProject.js",
+  "SelectedNode": "\\src\\ServerSide\\ServerFunctions.js",
   "PreviewInSolutionExplorer": false
 }

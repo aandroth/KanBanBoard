@@ -1,13 +1,11 @@
 import React from 'react';
 import './ProjectView.css'
 import { Link } from 'react-router-dom';
-import AddProjectTask from '../AddProjectTask/AddProjectTask';
 import { connect } from 'react-redux';
-import { addTask, deleteTask, getTasks, initFn } from '../Redux/Actions';
+import { deleteTask, initFn } from '../Redux/Actions';
+import { deleteTaskDb } from '../ServerSide/ServerActions';
 
-
-
-const Task = ({ onClick, ID, title, categoryID }) => {
+const Task = ({ onClick, ID, title, categoryID, userId, projId, deleteFn }) => {
 
     let updateUrlStr = "updateprojecttask?c=" + categoryID + "&k=" + ID;
 
@@ -20,32 +18,38 @@ const Task = ({ onClick, ID, title, categoryID }) => {
             <div>
                 <p>{title}</p>
                 <Link to={updateUrlStr}><button>View/Update</button></Link>
-                <button onClick={() => onClick(ID, categoryID)}>Delete</button>
+                <button onClick={() => onClick(userId, projId, ID, categoryID, deleteFn)}>Delete</button>
             </div>
         </li>
     );
 }
 
-let myID;
-
 class TaskList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
-    componentDidMount() {
-        myID = this.props.ID;
+    async deleteTaskFromLocalAndDb(userId, projId, id, catId, deleteFn) {
+        console.log("projId: " + projId);
+        console.log("userId: " + userId);
+        let success = await deleteTaskDb(userId, projId, id);
+        if (success) {
+            console.log("Delete was successful");
+            deleteFn(id, catId);
+        }
+        else {
+            console.log("Delete failed");
+            alert("Delete FAILED");
+            // Maybe reload the projects
+        }
     }
 
     render() {
         return (
             <div className="task-list">
-                <div style={{ width: "100%", left: "50px", border: "solid blue 1px" }}>
+                <div style={{ width: "100%", left: "50px", border: "solid blue 1px", fill: "blue" }}>
                     <h1>{this.props.title}</h1>
                 </div>
                 <div style={{ width: "100%", textAlign: "right", right: "0px", border: "solid red 1px" }}>
                     <ul>
-                        {this.props.tasks.map(t => <Task onClick={this.props.deleteTask} ID={t.key} title={t.title} key={t.key} categoryID={this.props.ID} />)}
+                        {this.props.tasks.map(t => <Task onClick={this.deleteTaskFromLocalAndDb} ID={t.key} title={t.title} key={t.key} categoryID={this.props.ID} userId={this.props.userKey} projId={this.props.projKey} deleteFn={this.props.deleteTask} />)}
                     </ul>
                 </div>
             </div>
@@ -53,14 +57,14 @@ class TaskList extends React.Component {
     }
 }
 
-
-const mapStateToProps = (state) => ({
-
+const mapStateToProps = state => ({
+    userKey: state.reducerFn.active_user.key,
+    projKey: state.reducerFn.user_list[state.reducerFn.active_user.idx].project_list[state.reducerFn.project_idx].key,
 })
 
 const mapDispatchToProps = {
     initFn,
-    deleteTask
+    deleteTask,
 }
 
 export default connect(

@@ -3,6 +3,7 @@ import './AddProject.css';
 import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 import { updateProject } from '../Redux/Actions';
+import { updateProjectDb } from '../ServerSide/ServerActions';
 
 
 const InputField = (props) => {
@@ -40,7 +41,7 @@ class UpdateProject extends React.Component {
 
         // Find the project
         for (let ii = 0; ii < this.props.project_list.length; ++ii) {
-            if (this.props.project_list[ii].key == this.mProjectKey) {
+            if (this.props.project_list[ii].key === this.mProjectKey) {
                 console.log("Found match at idx " + ii)
                 this.mProjectIdx = ii;
                 break;
@@ -52,8 +53,8 @@ class UpdateProject extends React.Component {
         this.mDescription = PATH.description;
         this.mStart_Date = PATH.start_date;
         this.mEnd_Date = PATH.end_date;
-        console.log("mTitle: " + this.mTitle + " mSummary: " + this.mSubtitle + " mAcc_Crit: " + this.mDescription);
-        console.log(" mDue_Date: " + this.mStart_Date + " mPriority: " + this.mEnd_Date + " key: " + this.mProjectKey);
+        console.log("mTitle: " + this.mTitle + " mSubtitle: " + this.mSubtitle + " mDescription: " + this.mDescription);
+        console.log(" mStart_Date: " + this.mStart_Date + " mEnd_Date: " + this.mEnd_Date + " key: " + this.mProjectKey);
     }
 
     getURLParameter = (name, location) => {
@@ -67,6 +68,23 @@ class UpdateProject extends React.Component {
         document.getElementById("description").value = this.mDescription;
         document.getElementById("start_date").value = this.mStart_Date;
         document.getElementById("end_date").value = this.mEnd_Date;
+    }
+
+    verifyUpdate = async (userId, _title, _subtitle, _description,
+                            _start_date, _end_date, _idx, _key, history) => {
+
+        let success = await updateProjectDb(userId, _key, _title, _subtitle, _description,
+                                                                _start_date, _end_date);
+        if (success) {
+            console.log("Update successful!");
+            console.log("Dispatching with mProjectIdx: " + this.mProjectIdx + ", mProjectKey: " + this.mProjectKey)
+            this.props.dispatch(updateProject(_title, _subtitle, _description, _start_date, _end_date, this.mProjectIdx, this.mProjectKey));
+            history.push("dashboard");
+        }
+        else {
+            console.log("UPDATE FAILED");
+            alert("UPDATE FAILED");
+        }
     }
 
     render() {
@@ -84,29 +102,29 @@ class UpdateProject extends React.Component {
                                     alert("Bad title entry!");
                                     return;
                                 }
-                            let _subtitle = document.getElementById("summ").value;
+                            let _subtitle = document.getElementById("subtitle").value;
                             if (!_subtitle.trim()) {
                                 alert("Bad summary entry!");
                                 return;
                             }
-                            let _description = document.getElementById("acc-crit").value;
+                            let _description = document.getElementById("description").value;
                             if (!_description.trim()) {
                                 alert("Bad acceptance entry!");
                                 return;
                             }
-                            let _start_date = document.getElementById("due-date").value;
+                            let _start_date = document.getElementById("start_date").value;
                             if (!_start_date.trim()) {
                                 alert("Bad date entry!");
                                 return;
                             }
-                            let _end_date = document.getElementById("priority").value;
+                            let _end_date = document.getElementById("end_date").value;
                             if (!_end_date.trim()) {
                                 alert("Bad priority entry!");
                                 return;
                             }
-                            console.log("Dispatching with mProjectIdx: " + this.mProjectIdx + ", mProjectKey: " + this.mProjectKey)
-                            this.props.dispatch(updateProject(_title, _subtitle, _description, _start_date, _end_date, this.mProjectIdx, this.mProjectKey));
-                            history.push("dashboard");
+                            this.verifyUpdate(this.props.userId, _title, _subtitle, _description,
+                                _start_date, _end_date, this.mProjectIdx, this.mProjectKey,
+                                history);
                         }}>
                         <InputField ID="title" type="text" text={this.mTitle} />
                         <br />
@@ -127,7 +145,8 @@ class UpdateProject extends React.Component {
 }
 
 const mapPropsToState = state => ({
-    project_list: state.reducerFn.project_list,
+    userId: state.reducerFn.active_user.key,
+    project_list: state.reducerFn.user_list[state.reducerFn.active_user.idx].project_list,
 })
 
 

@@ -2,7 +2,8 @@ import React from 'react';
 import './AddProjectTask.css';
 import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
-import { updateTask, deleteTask, initFn } from '../Redux/Actions';
+import { updateTask } from '../Redux/Actions';
+import { updateTaskDb } from '../ServerSide/ServerActions';
 
 
 const InputField = (props) => {
@@ -31,6 +32,19 @@ class UpdateProjectTask extends React.Component {
         this.updateDefaultValues();
         console.log("Update component mounted.");
     }
+                              
+    verifyTaskUpdate = async (userKey, projKey, _title, _summ, _acc, _due, _pri, _cat, history) => {
+
+        console.log("In update, mCatId: " + this.mCatId + " and mTaskKey: " + this.mTaskKey + " and category: " + _cat)
+        let success = await updateTaskDb(userKey, projKey, this.mTaskKey, _title, _summ, _acc, _due, _pri, _cat);
+        if (success) {
+            this.props.dispatch(updateTask(_title, _summ, _acc, _due, _pri, _cat, this.mTaskIdx, this.mTaskKey, this.mCatId));
+            history.push("projectview");
+        }
+        else {
+            console.log("Failed update");
+        }
+    }
 
     getTaskFromCategories = () => {
         console.log("getTaskFromCategories.");
@@ -42,7 +56,7 @@ class UpdateProjectTask extends React.Component {
 
         // Find the task
         for (let ii = 0; ii < this.props.catObj[this.mCatId].length; ++ii) {
-            if (this.props.catObj[this.mCatId][ii].key == this.mTaskKey) {
+            if (this.props.catObj[this.mCatId][ii].key === this.mTaskKey) {
                 console.log("Found match at idx " + ii)
                 this.mTaskIdx = ii;
                 break;
@@ -56,11 +70,11 @@ class UpdateProjectTask extends React.Component {
         this.mPriority = PATH.priority;
         console.log("mTitle: " + this.mTitle + "mSummary: " + this.mSummary + "mAcc_Crit: " + this.mAcc_Crit);
         console.log("mDue_Date: " + this.mDue_Date + "mPriority: " + this.mPriority);
-    }
+    };
 
     getURLParameter = (name, location) => {
         return location.match(new RegExp('[?|&]' + name + '(.[0-9]*)'));
-    }
+    };
 
     updateDefaultValues = () => {
         console.log("updateDefaultValues.");
@@ -70,7 +84,7 @@ class UpdateProjectTask extends React.Component {
         document.getElementById("due-date").value = this.mDue_Date;
         document.getElementById("priority").value = this.mPriority;
         document.getElementById("category").value = this.mCatId;
-    }
+    };
 
     render() {
         console.log("In render: mTitle: " + this.mTitle);
@@ -112,9 +126,7 @@ class UpdateProjectTask extends React.Component {
                                 alert("Bad category entry!");
                                 return;
                             }
-                            console.log("Dispatching with mCatId: " + this.mCatId + ", mTaskIdx: " + this.mTaskIdx + ", mTaskKey: " + this.mTaskKey)
-                            this.props.dispatch(updateTask(_title, _summ, _acc, _due, _pri, _cat, this.mTaskIdx, this.mTaskKey, this.mCatId));
-                            history.push("projectview");
+                            this.verifyTaskUpdate(this.props.userKey, this.props.projKey, _title, _summ, _acc, _due, _pri, _cat, history);
                         }}>
                         <InputField ID="title" type="text" text={this.mTitle} />
                         <br />
@@ -137,7 +149,9 @@ class UpdateProjectTask extends React.Component {
 }
 
 const mapPropsToState = state => ({
-    catObj: state.reducerFn.categories,
+    userKey: state.reducerFn.active_user.key,
+    projKey: state.reducerFn.user_list[state.reducerFn.active_user.idx].project_list[state.reducerFn.project_idx].key,
+    catObj: state.reducerFn.user_list[state.reducerFn.active_user.idx].project_list[state.reducerFn.project_idx].categories,
 })
 
 

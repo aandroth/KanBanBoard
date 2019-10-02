@@ -13,3 +13,11 @@
     border-left: solid 2px;
     width: 20%;
 }
+
+.project_in_dashboard {
+    background-color: blue;
+    border: solid 2px;
+    width: 50%;
+    height: 50%;
+    color: white;
+}

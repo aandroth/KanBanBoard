@@ -2,8 +2,9 @@ import React from 'react';
 import './AddProject.css';
 import { Link } from 'react-router-dom';
 import { Route } from 'react-router';
-import { addProject, initFn } from '../Redux/Actions';
+import { addProject } from '../Redux/Actions';
 import { connect } from 'react-redux';
+import { addProjectDb } from '../ServerSide/ServerActions';
 
 const InputField = (props) => {
     return (
@@ -12,6 +13,34 @@ const InputField = (props) => {
 }
 
 const AddProject = ({ dispatch }) => {
+
+    function getUserKeyFromUrl(){
+        console.log("getProjectFromCategories.");
+        let url = document.URL;
+        let variables = url.split("/").pop();
+        let userKey = Number(getURLParameter('u', variables)[1].split('=').pop());
+        return userKey;
+    }
+
+    function getURLParameter(name, location){
+        return location.match(new RegExp('[?|&]' + name + '(.[0-9]*)'));
+    }
+
+    async function verifyProjectCreation(_title, _subtitle, _description, _start_date, _end_date, history) {
+
+        let userKey = getUserKeyFromUrl();
+        console.log("verify userKey: " + userKey);
+        try {
+            let newProjKey = await addProjectDb(userKey, _title, _subtitle, _description, _start_date, _end_date);
+            if (newProjKey > 0)
+                dispatch(addProject(newProjKey, _title, _subtitle, _description, _start_date, _end_date));
+        }
+        catch (err) {
+            console.log("Error! " + err.message);
+        }
+        history.push("dashboard");
+    }
+
     return (
         <div>
             <Link to="dashboard"><button>Cancel</button></Link>
@@ -46,14 +75,7 @@ const AddProject = ({ dispatch }) => {
                             alert("Bad entry!");
                             return;
                         }
-                        console.log("Sending to add with title " + _title + " and " + _subtitle);
-                        try {
-                            dispatch(addProject(_title, _subtitle, _description, _start_date, _end_date));
-                        }
-                        catch (err) {
-                            console.log("Error! " + err.message);
-                        }
-                        history.push("dashboard");
+                        verifyProjectCreation(_title, _subtitle, _description, _start_date, _end_date, history);
                     }}>
                     <InputField ID="title" type="text" placeholder="Title" />
                     <br />
