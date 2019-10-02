@@ -10,6 +10,7 @@ module.exports = {
         'webpack-dev-server/client?http://localhost:3000',
         path.join(__dirname, './src/index.js')
     ],
+    target: 'node',
     output: {
         path: path.join(__dirname, '/dist/'),
         filename: '[name].js',
