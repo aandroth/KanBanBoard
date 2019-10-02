@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { signup } from '../Redux/Actions';
 import axios from 'axios';
-import { closeSync } from 'fs';
-import { tsTupleType } from '@babel/types';
 
 const dup_error = 'ER_DUP_ENTRY';
 const HOST_URL = 'http://localhost:8080/kb/';
