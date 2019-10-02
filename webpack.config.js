@@ -10,6 +10,11 @@ module.exports = {
         'webpack-dev-server/client?http://localhost:3000',
         path.join(__dirname, './src/index.js')
     ],
+    devServer: {
+    	allowedHosts: ['.us-west-1.compute.amazonaws.com'],
+	disableHostCheck: true,
+	port: 3000
+    },
     target: 'node',
     output: {
         path: path.join(__dirname, '/dist/'),
