@@ -16,8 +16,22 @@ module.exports = {
         filename: '[name].js',
         publicPath: '/'
     },
+    devServer: {
+        disableHostCheck: true,
+        port: 3000
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html'
+        })
+    ],
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: { loader: 'babel-loader' }
+            },
             {
                 test: /.jsx?$/,
                 loader: 'babel-loader',
@@ -37,7 +51,7 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
-            },
-        ]
+            }
+        ],
     },
 };
