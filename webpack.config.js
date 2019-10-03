@@ -7,7 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     devtool: 'eval-source-map',
     entry: [
-        'webpack-dev-server/client?http://localhost:3000',
+        
         path.join(__dirname, './src/index.js')
     ],
     devServer: {
@@ -40,9 +40,25 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
-            },
+            	test: /\.css$/,
+		use: extractTextPlugin.extract({
+	        fallback: 'style-loader',
+	        use: [
+	            {
+	       		    loader: 'css-loader',
+	        	    options: {
+	                	   modules: true,
+	                    	   localIdentName: '[path][name]_[local]--[hash:base64:8]',
+	            	    },
+	            },
+	            {
+	                loader: 'postcss-loader',
+	                options: { plugins: () => [ nested(), autoprefixer(), values] },
+	            }
+	        ]
+	    	}),
+	    	exclude: [...]
+            }
         ]
     },
 };
