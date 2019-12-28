@@ -1,14 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\dist",
     "\\public",
     "\\src",
+    "\\src\\AddProject",
+    "\\src\\AddProjectTask",
     "\\src\\Dashboard",
     "\\src\\ProjectView",
+    "\\src\\Redux",
     "\\src\\ServerSide",
     "\\src\\Signup"
   ],
-  "SelectedNode": "\\webpack.config.js",
+  "SelectedNode": "\\src\\ServerSide\\ServerFunctions.js",
   "PreviewInSolutionExplorer": false
 }

@@ -12,6 +12,7 @@ import updateproject from '../src/AddProject/UpdateProject';
 import axitest from '../src/ServerSide/AxiosTest.js';
 import { initFn } from './Redux/Actions';
 import { connect } from 'react-redux';
+import { loginAndGetUserFromDBIfLoggedIn } from './ServerSide/ServerFunctions';
 
 const Home = () => {
     return (
@@ -34,16 +35,26 @@ class App extends React.Component {
 
     componentDidMount() {
         this.props.initFn();
+
+        document.cookie = "username=A;"; // Add expiration date
+        let userEmailString = document.cookie.split(';')[0];
+        console.log("cookie userEmailString: "+userEmailString);
+        let userEmail = userEmailString.split('=')[1];
+        console.log("cookie userEmail: " +userEmail);
+        if(userEmail != "")
+            loginAndGetUserFromDBIfLoggedIn(userEmail);
     }
 
-    // Code to check that the user is logged in if on any other page than signup, login, home
-    //verifyUserIsLoggedIn() {
-    //    if (this.props.user.idx == -1) {
-    //        document.URL
-    //    }
-    //}
-
     render() {
+
+        if (!this.props.logged_in) {
+            let page = window.location.href.split('/').pop();
+            if (page != "" || page != "loginpage" || page != "signup")
+                console.log("User is not logged in: " + page);
+            else
+                console.log("User is at entry point: " + page);
+        }
+
         console.log("name of user: "+this.props.user.name);
         return (
             <div>
@@ -73,6 +84,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
     user: state.reducerFn.active_user,
+    loggin_in: state.reducerFn.loggin_in,
 })
 
 const mapDispatchToProps = {

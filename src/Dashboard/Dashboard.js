@@ -14,17 +14,22 @@ const Project = ({ userId, deleteFn, loadFn, changeFn, title, subtitle, projKey,
     return (
         <div className="project_in_dashboard">
             <p style={{ top: "10px", left: "10px" }}>Type</p>
-            <div style={{ width: "10%", left: "50px", border: "solid blue 1px" }}>
-                {title}
-                <br />
-                {subtitle}
+            <div className="project_delete_button">
+                <button onClick={() => onClick(userId, projKey, deleteFn)}>Delete</button>
+            </div>
+            <div className="title_and_subtitle">
+                <p className="project_title">
+                    {title}
+                </p>
+                <p className="project_subtitle">
+                    {subtitle}
+                </p>
             </div>
             <div style={{ width: "10%", textAlign: "right", padding: "10px", right: "0px", border: "solid red 1px" }}>
                 <Link to="projectview"><button onClick={() => selectProject(userId, projKey, loadFn, changeFn)}>View</button></Link>
                 <br />
                 <Link to={updateUrl(projKey)}><button>Update</button></Link>
                 <br />
-                <button onClick={() => onClick(userId, projKey, deleteFn)}>Delete</button>
             </div>
         </div>
     )

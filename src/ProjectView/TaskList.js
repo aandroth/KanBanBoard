@@ -5,18 +5,18 @@ import { connect } from 'react-redux';
 import { deleteTask, initFn } from '../Redux/Actions';
 import { deleteTaskDb } from '../ServerSide/ServerActions';
 
-const Task = ({ onClick, ID, title, categoryID, userId, projId, deleteFn }) => {
+const Task = ({ onClick, ID, Due, title, categoryID, userId, projId, deleteFn }) => {
 
     let updateUrlStr = "updateprojecttask?c=" + categoryID + "&k=" + ID;
 
     return (
         <li className="task-list-item">
-            <div>
+            <div style={{ textAlign: "left", left: "10%" }}>
+                <p>{title}</p>
                 <p>{ID}</p>
-                <p>Priority</p>
+                <p>{Due}</p>
             </div>
             <div>
-                <p>{title}</p>
                 <Link to={updateUrlStr}><button>View/Update</button></Link>
                 <button onClick={() => onClick(userId, projId, ID, categoryID, deleteFn)}>Delete</button>
             </div>
@@ -49,7 +49,12 @@ class TaskList extends React.Component {
                 </div>
                 <div style={{ width: "100%", textAlign: "right", right: "0px", border: "solid red 1px" }}>
                     <ul>
-                        {this.props.tasks.map(t => <Task onClick={this.deleteTaskFromLocalAndDb} ID={t.key} title={t.title} key={t.key} categoryID={this.props.ID} userId={this.props.userKey} projId={this.props.projKey} deleteFn={this.props.deleteTask} />)}
+                        {this.props.tasks.map(t => <Task
+                            onClick={this.deleteTaskFromLocalAndDb}
+                            ID={t.key} title={t.title} key={t.key} categoryID={this.props.ID}
+                            Due={t.due_Date}
+                            userId={this.props.userKey} projId={this.props.projKey}
+                            deleteFn={this.props.deleteTask} />)}
                     </ul>
                 </div>
             </div>

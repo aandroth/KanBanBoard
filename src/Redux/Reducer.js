@@ -224,7 +224,8 @@ export const reducerFn = (state = {}, action) => {
                     list1[ii] = { ...list1[ii], categories: catlist0 };
                 return {
                     ...state, active_user: { name: action.name, email: action.email, idx: 0, key: action.key, project_list: list1 },
-                    user_list: [{ name: action.name, key: action.key, email: action.email, idx: 0, project_list: list1 }]
+                    user_list: [{ name: action.name, key: action.key, email: action.email, idx: 0, project_list: list1 }],
+                    logged_in: true
                 }
             }
         case 'INIT':
@@ -249,7 +250,7 @@ export const reducerFn = (state = {}, action) => {
                     let _user_list = [];
                     _user_list.push({ name: "Nobody", key: 0, email: "n@n.com", passhash: null, project_list: list1 });
                     return {
-                        filled: true, project_list: list1, user_list: _user_list, active_user: {name: "Nobody", email: "n@n.com", idx: 0, key: 0}, project_idx: 0
+                        filled: true, project_list: list1, user_list: _user_list, active_user: { name: "Nobody", email: "n@n.com", idx: 0, key: 0 }, project_idx: 0, logged_in: false
                     };
                 }
                 console.log("init: no changes");

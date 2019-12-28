@@ -1,7 +1,8 @@
 //import axios from 'axios';
 import axios from '../../node_modules/axios/index'; 
 
-const HOST_URL = 'http://www.Awstest-env-2.hzfudedbwd.us-west-1.elasticbeanstalk.com/kb/';//'http://localhost:8080/kb/';
+//const HOST_URL = 'http://www.Awstest-env-2.hzfudedbwd.us-west-1.elasticbeanstalk.com/kb/';
+const HOST_URL = 'http://localhost:5000/kb/';
 
 // Adding
 async function sendBackendAPI(url, data) {
@@ -50,6 +51,12 @@ export async function loadEntityFromDB(urlAppend) {
 export async function loginAndGetUserFromDB(userEmail, userPass) {
 
     let urlAppend = 'login/' + userEmail + '/' + userPass;
+    let urlStr = HOST_URL + urlAppend;
+    return await callBackendAPI(urlStr);
+}
+export async function loginAndGetUserFromDBIfLoggedIn(userEmail) {
+
+    let urlAppend = 'loginStatus/' + userEmail;
     let urlStr = HOST_URL + urlAppend;
     return await callBackendAPI(urlStr);
 }

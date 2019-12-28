@@ -17,7 +17,28 @@
 .project_in_dashboard {
     background-color: blue;
     border: solid 2px;
-    width: 50%;
+    width: 80%;
     height: 50%;
     color: white;
+}
+
+.title_and_subtitle {
+    width:75%;
+    right: 0px;
+    border: solid red 10px;
+    align-content: center;
+}
+
+.project_title {
+    font-size: 50px;
+}
+
+.project_subtitle {
+    font-size: 25px;
+}
+
+.project_delete_button {
+    position: ;
+    top: -45px;
+    right: -90%;
 }

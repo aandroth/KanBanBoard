@@ -20,9 +20,6 @@ class Login extends React.Component {
         }
     }
 
-    componentDidMount() {
-    }
-
     createUser = (data) => {
         console.log("Creating user: " + this.state.data.userName);
         this.props.dispatch(signup(this.state.data.userName,
@@ -46,6 +43,11 @@ class Login extends React.Component {
         else {
             console.log("Failed login: ");
         }
+    }
+
+    // Create the cookie to keep user logged in
+    createCookie(useremail) {
+        document.cookie = "username=" + useremail+";"; // Add expiration date
     }
 
     render() {
