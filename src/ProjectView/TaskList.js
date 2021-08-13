@@ -5,16 +5,37 @@ import { connect } from 'react-redux';
 import { deleteTask, initFn } from '../Redux/Actions';
 import { deleteTaskDb } from '../ServerSide/ServerActions';
 
-const Task = ({ onClick, ID, Due, title, categoryID, userId, projId, deleteFn }) => {
+
+const formattedDate = (dateSeconds) => {
+
+    console.log("formatting Date");
+    var dateObj = new Date();
+    dateObj.setTime(dateSeconds);
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var monthZero = "0";
+    if (month > 9)
+        monthZero = "";
+    var day = dateObj.getUTCDate();
+    var dayZero = "0";
+    if (day > 9)
+        monthZero = "";
+    var year = dateObj.getUTCFullYear();
+    var formattedDate = year + "-" + monthZero + month + "-" + dayZero + day;
+    console.log("formattedDate: " + formattedDate);
+    return formattedDate;
+};
+
+const Task = ({ onClick, ID, DueTime, title, categoryID, Summ, userId, projId, deleteFn }) => {
 
     let updateUrlStr = "updateprojecttask?c=" + categoryID + "&k=" + ID;
+    let dueDate = formattedDate(DueTime);
 
     return (
         <li className="task-list-item">
-            <div style={{ textAlign: "left", left: "10%" }}>
-                <p>{title}</p>
-                <p>{ID}</p>
-                <p>{Due}</p>
+            <div className="task-list-item-content">
+                <p className="task-list-item-title">{title}</p>
+                <p className="task-list-item-summary">{Summ}</p>
+                <p className="task-list-item-due">{"Due on: " + dueDate}</p>
             </div>
             <div>
                 <Link to={updateUrlStr}><button>View/Update</button></Link>
@@ -44,15 +65,16 @@ class TaskList extends React.Component {
     render() {
         return (
             <div className="task-list">
-                <div style={{ width: "100%", left: "50px", border: "solid blue 1px", fill: "blue" }}>
+                <div className="task-list-title">
                     <h1>{this.props.title}</h1>
                 </div>
-                <div style={{ width: "100%", textAlign: "right", right: "0px", border: "solid red 1px" }}>
+                <div className="task-list-content">
                     <ul>
                         {this.props.tasks.map(t => <Task
                             onClick={this.deleteTaskFromLocalAndDb}
                             ID={t.key} title={t.title} key={t.key} categoryID={this.props.ID}
-                            Due={t.due_Date}
+                            Summ={t.summary}
+                            DueTime={t.due_Date}
                             userId={this.props.userKey} projId={this.props.projKey}
                             deleteFn={this.props.deleteTask} />)}
                     </ul>

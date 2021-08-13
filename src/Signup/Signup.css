@@ -13,3 +13,22 @@
     border-left: solid 2px;
     width: 20%;
 }
+
+.login-signup-body {
+    position: relative;
+    width: 50%;
+    height: 10%;
+    min-height: 300px;
+    background-color: whitesmoke;
+    border-top: solid tan 5px;
+    border-left: solid tan 5px;
+    margin-top: 1%;
+    margin-left: 25%;
+    padding-top: 2%;
+}
+
+.login-signup input[type=text], input[type=password] {
+    border: none;
+    margin-left: 5%;
+    width: 70%;
+}

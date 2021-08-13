@@ -29,7 +29,6 @@ class Login extends React.Component {
 
     verifyLogin = async (_email, _password, history) => {
 
-
         console.log("Logging in with email " + _email + " and password " + _password);
 
         let userData = await loginAndGetUserFromDB(_email, _password);
@@ -47,12 +46,13 @@ class Login extends React.Component {
 
     // Create the cookie to keep user logged in
     createCookie(useremail) {
-        document.cookie = "username=" + useremail+";"; // Add expiration date
+        document.cookie = "username=" + useremail + ";"; // Add expiration date
+        document.cookie = "username=" + useremail + ";"; // Add expiration date
     }
 
     render() {
         return (
-            <div>
+            <div className="login-signup-body">
                 <br />
                 <Route render={({ history }) => (
                     <form
@@ -73,10 +73,12 @@ class Login extends React.Component {
                             this.verifyLogin(_email, _password, history);
 
                         }}>
-                        <InputField ID="email" type="text" placeholder="Email" />
-                        <br />
-                        <InputField ID="password" type="password" placeholder="Password" />
-                        <br />
+                        <div className="login-signup">
+                            <InputField ID="email" type="text" placeholder="Email" />
+                        </div>
+                        <div className="login-signup">
+                            <InputField ID="password" type="password" placeholder="Password" />
+                        </div>
                         <input type="submit" value="Submit" />
                         <Link to=""><button>Cancel</button></Link>
                     </form>

@@ -14,16 +14,79 @@
     width: 20%;
 }
 
-.task-list {
-    float: left;
-    border: solid 2px;
-    width: 32%;
-    height: 50%;
+.project-view {
+    padding-top: 5px;
+    margin-left: 30px;
+    left: 200px;
+    width: 95%;
+    min-height: 300px;
+    height: 100%;
 }
 
+.project-view-content {
+    width: 100%;
+    min-height: 300px;
+    height: 100%;
+}
+
+.task-list {
+    float: left;
+    margin-right: 10px;
+    width: 32%;
+    height: 100%;
+}
+
+.task-list-title {
+    width: 100%;
+    left: 50px;
+    border: solid blue 1px;
+    fill: blue;
+    background-color: lightblue;
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-list-content{
+    width: 100%;
+    min-height: 200px;
+    border: solid black 1px;
+    background-color: lightgrey;
+}
 
 .task-list-item {
-    width: 100%;
+    margin-bottom: 20px;
+    width: 90%;
+    text-align: left;
+    right: 20px;
     border: solid 2px;
     list-style-type: none;
+    background-color: lightgoldenrodyellow;
+}
+
+.task-list-item-content {
+    text-align: "left";
+    left: 10%;
+}
+
+.task-list-item-title {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    background-color: lightblue;
+}
+
+.task-list-item-summary {
+    width: 90%;
+    margin-left: 5%;
+    min-height: 100px;
+    max-height: 101px;
+    overflow-y: auto;
+    border: dashed 2px lightblue;
+    white-space: pre-wrap;
+}
+
+.task-list-item-due {
+    width: 90%;
+    margin-left: 5%;
+    font-weight: bold;
 }

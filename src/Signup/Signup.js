@@ -43,7 +43,7 @@ class SignupPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="login-signup-body">
                 <Route render={({ history }) => (
                     <form
                         className="Column-Form"
@@ -74,14 +74,18 @@ class SignupPage extends React.Component {
                                 this.verifySignup(_email, _name, _password, history);
                             }
                         }}>
-                        <InputField ID="name" type="text" name="name" placeholder="Name" />
-                        <br />
-                        <InputField ID="email" type="text" placeholder="Email" />
-                        <br />
-                        <InputField ID="password" type="password" placeholder="Password" />
-                        <br />
-                        <InputField ID="confirm_password" type="password" placeholder="Confirm Password" />
-                        <br />
+                        <div className="login-signup">
+                            <InputField ID="name" type="text" name="name" placeholder="Name" />
+                        </div>
+                        <div className="login-signup">
+                            <InputField ID="email" type="text" placeholder="Email" />
+                        </div>
+                        <div className="login-signup">
+                            <InputField ID="password" type="password" placeholder="Password" />
+                        </div>
+                        <div className="login-signup">
+                            <InputField ID="confirm_password" type="password" placeholder="Confirm Password" />
+                        </div>
                         <input type="submit" value="Submit" />
                     </form>
                 )} />

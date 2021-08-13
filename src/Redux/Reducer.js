@@ -225,7 +225,7 @@ export const reducerFn = (state = {}, action) => {
                 return {
                     ...state, active_user: { name: action.name, email: action.email, idx: 0, key: action.key, project_list: list1 },
                     user_list: [{ name: action.name, key: action.key, email: action.email, idx: 0, project_list: list1 }],
-                    logged_in: true
+                    logged_in: true, dashboardPageScroll: 0, projectPageScroll: 0
                 }
             }
         case 'INIT':
@@ -235,13 +235,17 @@ export const reducerFn = (state = {}, action) => {
                     let list0 = [];
                     list0.push({
                         title: "Example Task in Project", summary: "blank summary", acc_Crit: "acc_Crit",
-                        due_Date: "due_Date", priority: "priority", key: "0", category: 0
+                        due_Date: "1625356800000", priority: "priority", key: "0", category: 0
+                    });
+                    list0.push({
+                        title: "Example Task2 in Project", summary: "blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, blank summary, ", acc_Crit: "acc_Crit",
+                        due_Date: "1625356800000", priority: "priority", key: "1", category: 0
                     });
                     let catlist0 = [list0, [], []];
                     let list1 = [];
                     let list2 = [];
                     list1.push({
-                        title: "Example Project", subtitle: "Subtitle", description: "description here", start_date: "now", end_date: "later", categories: catlist0, key: 0,
+                        title: "Example Project", subtitle: "Subtitle is sub-title", description: "Description here.", start_date: "now", end_date: "later", categories: catlist0, key: 0,
                     });
                     list2.push({
                         title: "Example Project2", subtitle: "Subtitle2", description: "description 2 here", start_date: "was now", end_date: "maybe later", categories: [[], [], []], key: 1,
@@ -249,12 +253,33 @@ export const reducerFn = (state = {}, action) => {
                     console.log("init:So list1 has list1[0].categories[0][0].title: " + list1[0].categories[0][0].title);
                     let _user_list = [];
                     _user_list.push({ name: "Nobody", key: 0, email: "n@n.com", passhash: null, project_list: list1 });
+
                     return {
-                        filled: true, project_list: list1, user_list: _user_list, active_user: { name: "Nobody", email: "n@n.com", idx: 0, key: 0 }, project_idx: 0, logged_in: false
+                        filled: true, project_list: list1, user_list: _user_list,
+                        active_user: { name: "Nobody", email: "n@n.com", idx: 0, key: 0 },
+                        project_idx: 0, logged_in: false,
+                        dashboardPageScroll: 0, projectPageScroll: 0
                     };
                 }
                 console.log("init: no changes");
                 return state;
+            }
+        case 'UPDATE_DASHBOARD_SCROLL':
+            {
+                console.log("In Action.js inside UPDATE_DASHBOARD_SCROLL with value " + action.value);
+                return {
+                    ...state,
+                    dashboardPageScroll: action.value
+                }
+            }
+        case 'UPDATE_PROJECT_SCROLL':
+            {
+                console.log("In Action.js inside UPDATE_PROJECT_SCROLL with value " + action.value);
+
+                return {
+                    ...state,
+                    projectPageScroll: action.value
+                }
             }
         default:
             {

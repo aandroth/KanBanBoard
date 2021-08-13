@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AddProject.css';
 import { connect } from 'react-redux';
 import { Route, Link } from 'react-router-dom';
 import { updateProject } from '../Redux/Actions';
 import { updateProjectDb } from '../ServerSide/ServerActions';
+import { setSourceMapRange } from 'typescript';
 
 
 const InputField = (props) => {
@@ -24,6 +25,14 @@ class UpdateProject extends React.Component {
         this.mEnd_Date = "Error! DB mEnd_Date was not put in.";
         this.mProjectIdx = 0;
         this.mProjectKey = 0;
+
+        this.state = {
+            titleIsBad : false,
+            subtitleIsBad : false,
+            descriptionIsBad : false,
+            startIsBad : false,
+            endIsBad : false,
+        }
     }
 
     componentDidMount() {
@@ -90,52 +99,88 @@ class UpdateProject extends React.Component {
     render() {
         console.log("In render: mTitle: " + this.mTitle);
         return (
-            <div>
+            <div className="project-to-create" >
                 <Link to="dashboard"><button>Back to Project Board</button></Link>
                 <Route render={({ history }) => (
                     <form
                         className="Column-Form"
                         onSubmit={(event) => {
+                            let errorFound = false;
                             event.preventDefault();
                             let _title = document.getElementById("title").value;
-                                if (!_title.trim()) {
-                                    alert("Bad title entry!");
-                                    return;
-                                }
+                            if (!_title.trim()) {
+                                this.setState({ titleIsBad: true });
+                                errorFound = true;
+                            }
                             let _subtitle = document.getElementById("subtitle").value;
                             if (!_subtitle.trim()) {
-                                alert("Bad summary entry!");
-                                return;
+                                this.setState({ subtitleIsBad: true });
+                                errorFound = true;
                             }
                             let _description = document.getElementById("description").value;
                             if (!_description.trim()) {
-                                alert("Bad acceptance entry!");
-                                return;
+                                this.setState({ descriptionIsBad: true });
+                                errorFound = true;
                             }
                             let _start_date = document.getElementById("start_date").value;
                             if (!_start_date.trim()) {
-                                alert("Bad date entry!");
-                                return;
+                                this.setState({ startIsBad: true });
+                                errorFound = true;
                             }
                             let _end_date = document.getElementById("end_date").value;
                             if (!_end_date.trim()) {
-                                alert("Bad priority entry!");
+                                this.setState({ endIsBad: true });
+                                errorFound = true;
+                            }
+
+                            if (errorFound) {
                                 return;
                             }
+
                             this.verifyUpdate(this.props.userId, _title, _subtitle, _description,
                                 _start_date, _end_date, this.mProjectIdx, this.mProjectKey,
                                 history);
                         }}>
-                        <InputField ID="title" type="text" text={this.mTitle} />
-                        <br />
-                        <InputField ID="subtitle" type="text" text={this.mSubtitle} />
-                        <br />
-                        <InputField ID='description' type="text" text={this.mDescription} />
-                        <br />
-                        <InputField ID='start_date' type="date" text={this.mStart_Date} />
-                        <br />
-                        <InputField ID='end_date' type="text" text={this.mEnd_Date} />
-                        <br />
+                        <div className="add-project-title">
+                            <input ID="title" type="text" placeholder="Title" onChange={() => this.setState({ titleIsBad: false })} />
+                        </div>
+                        {this.state.titleIsBad &&
+                            <div className="project-input-error-bar">
+                                <p style={{ color: "red" }}>The title can't be empty</p>
+                            </div>
+                        }
+                        <div className="add-project-input">
+                            <input ID="subtitle" type="text" placeholder="Sub Title" onChange={() => this.setState({ subtitleIsBad: false })} />
+                        </div>
+                        {this.state.subtitleIsBad &&
+                            <div className="project-input-error-bar">
+                                <p style={{ color: "red" }}>The subtitle can't be empty</p>
+                            </div>
+                        }
+                        <div className="add-project-description" >
+                            <textarea ID="description" type="textarea" rows="50" cols="50" placeholder="Description" onChange={() => this.setState({ descriptionIsBad: false })} />
+                        </div>
+                        {this.state.descriptionIsBad &&
+                            <div className="project-input-error-bar">
+                                <p style={{ color: "red" }}>The description can't be empty</p>
+                            </div>
+                        }
+                        <div className="add-project-input">
+                            <input ID="start_date" type="text" placeholder="Start Date" onChange={() => this.setState({ startIsBad: false })} />
+                        </div>
+                        {this.state.startIsBad &&
+                            <div className="project-input-error-bar">
+                                <p style={{ color: "red" }}>The start date can't be empty</p>
+                            </div>
+                        }
+                        <div className="add-project-input">
+                            <input ID="end_date" type="text" placeholder="End Date" onChange={() => this.setState({ endIsBad: false })} />
+                        </div>
+                        {this.state.endIsBad &&
+                            <div className="project-input-error-bar">
+                                <p style={{ color: "red" }}>The end date can't be empty</p>
+                            </div>
+                        }
                         <input type="submit" value="Submit" />
                     </form>
                 )} />

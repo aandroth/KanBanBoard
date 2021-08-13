@@ -2,7 +2,7 @@
 import axios from '../../node_modules/axios/index'; 
 
 //const HOST_URL = 'http://www.Awstest-env-2.hzfudedbwd.us-west-1.elasticbeanstalk.com/kb/';
-const HOST_URL = 'http://localhost:5000/kb/';
+const HOST_URL = 'http://localhost:5000/kb/'; // Local dev machine
 
 // Adding
 async function sendBackendAPI(url, data) {
@@ -14,6 +14,7 @@ async function sendBackendAPI(url, data) {
                 return res.data;
             })
             .catch(function (err) {
+                console.log("sendBackendAPI encontered error");
                 console.log("Error: " + err);
             })
     }
@@ -36,6 +37,7 @@ async function callBackendAPI(url) {
                 return res.data;
             })
             .catch(function (err) {
+                console.log("callBackendAPI encontered error");
                 console.log("Error: " + err);
             })
     } catch (error) {

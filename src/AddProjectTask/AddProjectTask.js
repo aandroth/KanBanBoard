@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './AddProjectTask.css';
 import { connect } from 'react-redux';
 import { addTask } from '../Redux/Actions';
@@ -13,13 +13,19 @@ const InputField = (props) => {
 
 const AddProjectTask = ({ dispatch }) => {
 
-    // UNFINISHED////////////////////////////////
+    let [titleIsBad, setTitleIsBad] = useState(false);
+    let [summaryIsBad, setSummaryIsBad] = useState(false);
+    let [accIsBad, setAccIsBad] = useState(false);
+    let [dueIsBad, setDueIsBad] = useState(false);
+    let [priorityIsBad, setPriorityIsBad] = useState(false);
+
+    document.body.style = { backgroundColor: "goldenrod" };
 
     function getURLParameter(name, location) {
         return location.match(new RegExp('[?|&]' + name + '(.[0-9]*)'));
     }
 
-    async function verifyTaskCreation(_title, _summ, _acc, _due, _pri, _cat, history) {
+    async function verifyTaskCreation(_title, _summ, _acc, _dueSeconds, _pri, _cat, history) {
 
         let url = document.URL;
         let variables = url.split("/").pop();
@@ -27,19 +33,31 @@ const AddProjectTask = ({ dispatch }) => {
         let projKey = Number(getURLParameter('p', variables)[1].split('=').pop());
         console.log("Sending to add with user " + userKey + " and proj " + projKey);
 
-        let taskId = await addTaskDb(userKey, projKey, _title, _summ, _acc, _due, _pri, _cat);
+        let taskId = await addTaskDb(userKey, projKey, _title, _summ, _acc, _dueSeconds, _pri, _cat);
 
         if (taskId > 0) {
-            dispatch(addTask(_title, _summ, _acc, _due, _pri, _cat));
+            dispatch(addTask(_title, _summ, _acc, _dueSeconds, _pri, _cat, taskId));
             history.push("projectview");
         }
         else {
-            console.log("Failed signup");
+            console.log("Failed to create a Task");
         }
     }
 
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var monthZero = "0";
+    if (month > 9)
+        monthZero = "";
+    var day = dateObj.getUTCDate();
+    var dayZero = "0";
+    if (day > 9)
+        dayZero = "";
+    var year = dateObj.getUTCFullYear();
+    var datePlaceholder = year + "-" + monthZero + month + "-" + dayZero + day;
+
     return (
-        <div>
+        <div className="taskCreate-body">
             <Link to="projectview"><button>Back to Project Board</button></Link>
             <Route render={({ history }) => (
                 <form
@@ -48,48 +66,97 @@ const AddProjectTask = ({ dispatch }) => {
                         event.preventDefault();
                         let _title = document.getElementById("title").value;
                         if (!_title.trim()) {
-                            alert("Bad entry!");
-                            return;
+                            setTitleIsBad(true);
                         }
                         let _summ = document.getElementById("summ").value;
                         if (!_summ.trim()) {
-                        alert("Bad entry!");
-                        return;
+                            setSummaryIsBad(true);
                         }
                         let _acc = document.getElementById("acc-crit").value;
                         if (!_acc.trim()) {
-                        alert("Bad entry!");
-                        return;
+                            setAccIsBad(true);
                         }
-                        let _due = document.getElementById("due-date").value;
-                        if (!_due.trim()) {
-                        alert("Bad entry!");
-                        return;
+                        let _dueStr = document.getElementById("due-date").value;
+                        if (!_dueStr.trim()) {
+                            setDueIsBad(true);
                         }
+                        let _due = new Date(_dueStr);
                         let _pri = document.getElementById("priority").value;
                         if (!_pri.trim()) {
-                        alert("Bad entry!");
-                        return;
+                            setPriorityIsBad(true);
                         }
                         let _cat = document.getElementById("category").value;
                         if (!_cat.trim()) {
                             _cat = 0;
                         }
-                        verifyTaskCreation(_title, _summ, _acc, _due, _pri, _cat, history);
-                }}>
-                    <InputField ID="title" type="text" placeholder="Title" />
+
+                        if (titleIsBad || summaryIsBad || accIsBad || dueIsBad || priorityIsBad) {
+                            return;
+                        }
+
+                        verifyTaskCreation(_title, _summ, _acc, _due.getTime(), _pri, _cat, history);
+                    }}>
                     <br />
-                    <InputField ID="summ" type="text" placeholder="Summary" />
                     <br />
-                    <InputField ID='acc-crit' type="text" placeholder="Acceptance Criteria" />
-                    <br />
-                    <InputField ID='due-date' type="date" placeholder="Due Date" />
-                    <br />
-                    <InputField ID='priority' type="text" placeholder="Priority" />
-                    <br />
-                    <InputField ID='category' type="text" placeholder="Category: 0" />
-                    <br />
-                    <input type="submit" value="Submit" />
+                    <div className="task-input-master">
+                        <div className="task-input-basic">
+                            <input ID="title" type="text" placeholder="Title" onChange={() => setTitleIsBad(false)}/>
+                        </div>
+                        {titleIsBad &&
+                            <div className="task-input-error-bar">
+                                <p style={{ color: "red" }}>The title can't be empty</p>
+                            </div>
+                        }
+                        <br />
+                        <div className="task-input-summ">
+                            <textarea ID="summ" type="textfield" rows="25" cols="50" placeholder="Summary/Logs" onChange={() => setSummaryIsBad(false)}></textarea>
+                        </div>
+                        {summaryIsBad &&
+                            <div className="task-input-error-bar">
+                                <p style={{ color: "red" }}>The summary can't be empty</p>
+                            </div>
+                        }
+                        <br />
+                        <div className="task-input-basic">
+                            <input ID='acc-crit' type="text" placeholder="Acceptance Criteria" onChange={() => setAccIsBad(false)} />
+                        </div>
+                        {accIsBad &&
+                            <div className="task-input-error-bar">
+                                <p style={{ color: "red" }}>The acceptance criteria can't be empty</p>
+                                <br />
+                            </div>
+                        }
+                        <br />
+                        <div className="task-input-basic">
+                            <input ID='due-date' type="date" placeholder={datePlaceholder} onChange={() => setDueIsBad(false)} />
+                        </div>
+                        {dueIsBad &&
+                            <div className="task-input-error-bar">
+                                <p style={{ color: "red" }}>The due date can't be empty</p>
+                            </div>
+                        }
+                        <br />
+                        <div className="task-input-basic">
+                            <input ID='priority' type="text" placeholder="Priority" onChange={() => setPriorityIsBad(false)} />
+                        </div>
+                        {priorityIsBad &&
+                            <div className="task-input-error-bar">
+                                <p style={{ color: "red" }}>The priority can't be empty</p>
+                            </div>
+                        }
+                        <br />
+                        <div className="task-input-basic">
+                            <select name="Category" id="category" placeholder={0}>
+                                <option value={0}>To Do</option>
+                                <option value={1}>In Progress</option>
+                                <option value={2}>Done</option>
+                            </select>
+                        </div>
+                        <br />
+                        <div className="task-input-basic">
+                            <input type="submit" value="Submit" />
+                        </div>
+                    </div>
                 </form>
             )} />
         </div>

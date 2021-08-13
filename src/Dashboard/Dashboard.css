@@ -9,36 +9,82 @@
 }
 
 .formInput {
-    border-bottom: solid 2px;
-    border-left: solid 2px;
     width: 20%;
 }
 
-.project_in_dashboard {
-    background-color: blue;
-    border: solid 2px;
-    width: 80%;
-    height: 50%;
-    color: white;
+.project-list {
+    width: 100%;
+    height: 100%;
+    background: none;
 }
 
-.title_and_subtitle {
-    width:75%;
-    right: 0px;
-    border: solid red 10px;
-    align-content: center;
+.project-and-delete-in-dashboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
 }
 
-.project_title {
+.project-in-dashboard {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background-color: whitesmoke;
+    border-top: solid tan 5px;
+    border-left: solid tan 5px;
+    border-right: solid whitesmoke 5px;
+    border-bottom: solid whitesmoke 5px;
+}
+.project-in-dashboard:hover{
+    border: dashed lightblue 5px;
+}
+
+.title-and-subtitle {
+    width: 75%;
+    margin-left: 15px;
+}
+
+.project-title {
+    position: absolute;
     font-size: 50px;
+    color: lightblue;
+    top: 0px;
+    left: 0px;
+    margin-left: 15px;
 }
 
-.project_subtitle {
+.project-subtitle {
+    position: absolute;
     font-size: 25px;
+    color: lightblue;
+    bottom: 0px;
+    left: 0px;
+    width: 75%;
+    height: 50%;
+    overflow-y: hidden;
+    margin-left: 15px;
+    border: solid lightblue 3px;
 }
 
-.project_delete_button {
-    position: ;
-    top: -45px;
-    right: -90%;
+.view-and-update {
+    position: absolute;
+    width: 10%;
+    bottom: 0px;
+    right: 0px;
+    margin: 10px;
+}
+
+.project-view-button {
+    float: right;
+}
+
+.project-update-button {
+    float: right;
+}
+
+.project-delete-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 10px;
 }

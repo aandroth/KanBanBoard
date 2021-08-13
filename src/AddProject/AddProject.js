@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AddProject.css';
 import { Link } from 'react-router-dom';
 import { Route } from 'react-router';
@@ -13,6 +13,12 @@ const InputField = (props) => {
 }
 
 const AddProject = ({ dispatch }) => {
+
+    let [titleIsBad, setTitleIsBad] = useState(false);
+    let [subtitleIsBad, setSubtitleIsBad] = useState(false);
+    let [descriptionIsBad, setDescriptionIsBad] = useState(false);
+    let [startIsBad, setStartIsBad] = useState(false);
+    let [endIsBad, setEndIsBad] = useState(false);
 
     function getUserKeyFromUrl(){
         console.log("getProjectFromCategories.");
@@ -42,7 +48,7 @@ const AddProject = ({ dispatch }) => {
     }
 
     return (
-        <div>
+        <div className="project-to-create">
             <Link to="dashboard"><button>Cancel</button></Link>
             <br />
             <Route render={({ history }) => (
@@ -52,41 +58,69 @@ const AddProject = ({ dispatch }) => {
                         event.preventDefault();
                         let _title = document.getElementById("title").value;
                         if (!_title.trim()) {
-                            alert("Bad entry!");
-                            return;
+                            setTitleIsBad(true);
                         }
                         let _subtitle = document.getElementById("subtitle").value;
                         if (!_subtitle.trim()) {
-                            alert("Bad entry!");
-                            return;
+                            setSubtitleIsBad(true);
                         }
                         let _description = document.getElementById("description").value;
                         if (!_description.trim()) {
-                            alert("Bad entry!");
-                            return;
+                            setDescriptionIsBad(true);
                         }
                         let _start_date = document.getElementById("start_date").value;
                         if (!_start_date.trim()) {
-                            alert("Bad entry!");
-                            return;
+                            setStartIsBad(true);
                         }
                         let _end_date = document.getElementById("end_date").value;
                         if (!_end_date.trim()) {
-                            alert("Bad entry!");
+                            setEndIsBad(true);
+                        }
+                        if (titleIsBad || subtitleIsBad || descriptionIsBad || startIsBad || endIsBad) {
                             return;
                         }
                         verifyProjectCreation(_title, _subtitle, _description, _start_date, _end_date, history);
                     }}>
-                    <InputField ID="title" type="text" placeholder="Title" />
-                    <br />
-                    <InputField ID="subtitle" type="text" placeholder="Sub Title" />
-                    <br />
-                    <InputField ID="description" type="text" placeholder="Description" />
-                    <br />
-                    <InputField ID="start_date" type="text" placeholder="Start Date" />
-                    <br />
-                    <InputField ID="end_date" type="text" placeholder="End Date" />
-                    <br />
+                    <div className="add-project-title">
+                        <input ID="title" type="text" placeholder="Title" onChange={() => setTitleIsBad(false)} />
+                    </div>
+                    {titleIsBad &&
+                        <div className="project-input-error-bar">
+                            <p style={{ color: "red" }}>The title can't be empty</p>
+                        </div>
+                    }
+                    <div className="add-project-input">
+                        <input ID="subtitle" type="text" placeholder="Sub Title" onChange={() => setSubtitleIsBad(false)} />
+                    </div>
+                    {subtitleIsBad &&
+                        <div className="project-input-error-bar">
+                            <p style={{ color: "red" }}>The subtitle can't be empty</p>
+                        </div>
+                    }
+                    <div className="add-project-description" >
+                        <textarea ID="description" type="textarea" rows="50" cols="50" placeholder="Description" onChange={() => setDescriptionIsBad(false)} />
+                    </div>
+                    {descriptionIsBad &&
+                        <div className="project-input-error-bar">
+                            <p style={{ color: "red" }}>The description can't be empty</p>
+                        </div>
+                    }
+                    <div className="add-project-input">
+                        <input ID="start_date" type="text" placeholder="Start Date" onChange={() => setStartIsBad(false)} />
+                    </div>
+                    {startIsBad &&
+                        <div className="project-input-error-bar">
+                            <p style={{ color: "red" }}>The start date can't be empty</p>
+                        </div>
+                    }
+                    <div className="add-project-input">
+                        <input ID="end_date" type="text" placeholder="End Date" onChange={() => setEndIsBad(false)} />
+                    </div>
+                    {endIsBad &&
+                        <div className="project-input-error-bar">
+                            <p style={{ color: "red" }}>The end date can't be empty</p>
+                        </div>
+                    }
                     <input type="submit" value="Submit" />
                 </form>
             )} />

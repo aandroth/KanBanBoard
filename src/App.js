@@ -10,9 +10,9 @@ import updateprojecttask from '../src/AddProjectTask/UpdateProjectTask';
 import addproject from '../src/AddProject/AddProject';
 import updateproject from '../src/AddProject/UpdateProject';
 import axitest from '../src/ServerSide/AxiosTest.js';
-import { initFn } from './Redux/Actions';
+import { initFn, login } from './Redux/Actions';
 import { connect } from 'react-redux';
-import { loginAndGetUserFromDBIfLoggedIn } from './ServerSide/ServerFunctions';
+import { loginAndGetUserFromDB } from './ServerSide/ServerFunctions';
 
 const Home = () => {
     return (
@@ -32,17 +32,47 @@ const Home = () => {
 };
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
     componentDidMount() {
         this.props.initFn();
 
-        document.cookie = "username=A;"; // Add expiration date
+        document.cookie = "username=A@A;"; // Add expiration date
         let userEmailString = document.cookie.split(';')[0];
         console.log("cookie userEmailString: "+userEmailString);
         let userEmail = userEmailString.split('=')[1];
         console.log("cookie userEmail: " +userEmail);
-        if(userEmail != "")
-            loginAndGetUserFromDBIfLoggedIn(userEmail);
+        //if(userEmail != "")
+        //    loginAndGetUserFromDBIfLoggedIn(userEmail);
+        if (userEmail != "") {
+            console.log("Attempting to login with user email");
+            this.verifyLogin(userEmail, "a", history);
+        }
+    }
+
+    verifyLogin = async (_email, _password, history) => {
+
+        console.log("Logging in with email " + _email + " and password " + _password);
+
+        try {
+            let userData = await loginAndGetUserFromDB(_email, _password);
+
+            if (userData.userEmail) {
+                console.log("Successful login: ");
+                console.log(userData);
+                this.props.dispatch(login(userData.userName, userData.userEmail, userData.id, userData.projList));
+                history.push("dashboard");
+                console.log("Logged in with user email cookie!");
+            }
+            else {
+                console.log("Failed login: ");
+            }
+        }
+        catch (error) {
+            console.log("Failed login: ");
+        }
     }
 
     render() {
@@ -57,14 +87,14 @@ class App extends React.Component {
 
         console.log("name of user: "+this.props.user.name);
         return (
-            <div>
+            <div style={{ minHeight: "1000px", height: window.height }}>
                 <Router basename="/">
                     <div className="App-header">
                         My Kanban Board!
-                        <Link to="/">Logout</Link>
-                        <p style={{ position: "absolute", right: "0px" }}>{this.props.user.name}</p>
+                        <Link to="/"><button className="LogoutButton" onClick={this.props.initFn()}>Logout</button></Link>
+                        <p style={{ position: "absolute", right: "20px" }}>{this.props.user.name}</p>
                     </div>
-                    <div>
+                    <div style={{ backgroundColor: "darkgrey", minHeight: "1000px", height: "100%" }}>
                         <Route path="/" exact component={Home} />
                         <Route path="/signup" component={signup} />
                         <Route path="/loginpage" component={loginpage} />
@@ -89,6 +119,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     initFn,
+    login,
 }
 
 export default connect(

@@ -1,9 +1,9 @@
-let nextTaskKey = 1;
+let nextTaskKey = 2;
 let nextProjectKey = 2;
 // Actions
-export const addTask = (_title, _summary, _acc_crit, _due_date, _priority, _categoryIdx) => ({
+export const addTask = (_title, _summary, _acc_crit, _due_date, _priority, _categoryIdx, _taskId) => ({
     type: 'ADD_TASK',
-    key: nextTaskKey++,
+    key: _taskId,
     title: _title,
     summary: _summary,
     acc_Crit: _acc_crit,
@@ -97,4 +97,14 @@ export const login = (_name, _email, _key, _projs) => ({
 
 export const initFn = () => ({
     type: 'INIT'
+});
+
+export const updateDashboardScroll = (_value) => ({
+    type: 'UPDATE_DASHBOARD_SCROLL',
+    value: _value
+});
+
+export const updateProjectScroll = (_value) => ({
+    type: 'UPDATE_PROJECT_SCROLL',
+    value: _value
 });

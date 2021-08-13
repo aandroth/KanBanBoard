@@ -9,7 +9,70 @@
 }
 
 .formInput {
-    border-bottom: solid 2px;
-    border-left: solid 2px;
     width: 20%;
+}
+.Column-Form {
+    width: 100%;
+}
+
+.formDiv {
+    margin: 0;
+    width: 20%;
+}
+
+.formInput {
+    width: 100%;
+}
+
+.project-list {
+    width: 70%;
+    height: 100%;
+    background: none;
+}
+
+.project-to-create {
+    width: 90%;
+    height: 100%;
+    min-height: 300px;
+    background-color: whitesmoke;
+    border-top: solid tan 5px;
+    border-left: solid tan 5px;
+    margin-top: 1%;
+    margin-left: 3%;
+}
+
+.add-project-input input[type=text] {
+    border: none;
+    margin-left: 0%;
+    width: 97%;
+}
+
+.add-project-title input[type=text] {
+    height: 100%;
+    width: 97%;
+    float: left;
+    font-size: 70px;
+    color: lightblue;
+    top: 0px;
+    left: 0px;
+    margin-left: 1%;
+    border: none;
+}
+
+.add-project-description textarea {
+    font-size: 25px;
+    color: lightblue;
+    width: 75%;
+    height: 100px;
+    overflow-y: hidden;
+    float: left;
+    margin-left: 1%;
+    margin-top: 1%;
+    border: solid lightblue 3px;
+}
+.project-input-error-bar p{
+    width: 100%;
+    border-top: solid red 4px;
+    color: red;
+    text-align: left;
 }

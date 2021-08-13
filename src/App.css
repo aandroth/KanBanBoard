@@ -1,3 +1,7 @@
+body{
+    background-color: darkgray;
+}
+
 .App {
   text-align: center;
 }
@@ -31,4 +35,18 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.LogoutButton {
+    background-color: darkgray;
+    border: solid white 2px;
+    color: red;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 25px;
+    margin: 4px 2px;
+    margin-top: 10px;
+    cursor: pointer;
 }
